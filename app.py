@@ -17,8 +17,11 @@ import json
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('CHANNEL_ACCESS_TOKEN')
-handler = WebhookHandler('SECRET_KEY')
+line_bot_api = LineBotApi('66QuFSr22occhn5pWWZgiNHPlNiAkOmbPltgdKEwodeRi3ipqJhTnj4l4TILfrtgXcz1mrxOJjfnPBPeLgqZvrMm0UFJzo9wBahXTUFRhwTseht5pJg/3KVGkqL9uGSrKGdR669woiNKYg7Az01aawdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('f8b590c9c7ea8cbb59427a9aa4993a25')
+
+users = {}
+
 
 
 @app.route("/callback", methods=['POST'])
@@ -42,6 +45,11 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    id = event.source.user_id
+    print(id)
+    profile = line_bot_api.get_profile(id)
+    print(profile)
+    user[id] = 0
     if event.message.text =='你老師':
         message = TextSendMessage(text='許政穆老師')
         line_bot_api.reply_message(event.reply_token, message)
