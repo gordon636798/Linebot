@@ -1,14 +1,31 @@
 # LINE BOT 教學
 
 ## LINE BOT介紹
-- line@
-- linebot
 
+- Message API(linebot)
+    - reply API
+    - push API
+    
+    ![](https://i.imgur.com/7Lk7HXe.png)
+
+
+- linebot運作
+![](https://i.imgur.com/yFpsd8h.png)
+
+
+
+
+linebot & line@ 兩者在去年已被統整
 ![](https://i.imgur.com/G2UPIwi.png)
 
-----
+付費模式
+![](https://i.imgur.com/MwbOLnr.png)
+
+
+***
+
 ## 環境設定
-1. 進入連結複製中間的CDOE 存為.py檔放在桌面
+1. 進入連結複製中間的CDOE 存為.py檔放在桌面新的資料夾
 https://github.com/line/line-bot-sdk-python
 2. 註冊ngrok(測試用linebot webhook)
 https://ngrok.com/
@@ -16,23 +33,30 @@ https://ngrok.com/
 3. python3環境
 - pip install flask
 - pip install line-bot-sdk
+
 ---
 ## 建立LINEBOT
 **1. 建立Providers**
 ![](https://i.imgur.com/nAAgSif.png)
+
 **2. 選擇Messaging API(linebot服務)**
 ![](https://i.imgur.com/l2DAnbM.png)
+
 **3. optional選項可不填**
 ![](https://i.imgur.com/k5nj7wP.png)
+
 **4. 加個好友**
 ![](https://i.imgur.com/4pbv5cs.png)
+
 **5. 進入LINE Offical Account Manager後台管理**
 https://www.linebiz.com/tw/login/
 ![](https://i.imgur.com/XqIJgom.png)
-**7. 進入聊天設定**
+
+**6. 進入聊天設定**
 ![](https://i.imgur.com/R9HRF6a.png)
 ![](https://i.imgur.com/ZOn6DkQ.png =400x)
-**6. 選擇「聊天」選項**
+
+**7. 選擇「聊天」選項**
 ![](https://i.imgur.com/0hRoCys.png)
 
 ## 聊天模式
@@ -64,15 +88,19 @@ https://www.linebiz.com/tw/login/
 1. 一般問題回復
 ![](https://i.imgur.com/zPiC1Va.png)
 ![](https://i.imgur.com/SQA25yA.png)
+
 2. 基本資訊回復
 ![](https://i.imgur.com/G23AQWD.png)
+
 3. 點選開啟並設定回復的話後點選右上角「儲存」
 ![](https://i.imgur.com/kjogEQ6.png)
 ![](https://i.imgur.com/U8mFRYm.png)
 
 
 -----
-- 其他範例
+## 其他範例
+
+- 圖文訊息
 ![](https://i.imgur.com/oJOYzQF.png)
 ![](https://i.imgur.com/tTaBU9M.png)
 
@@ -84,6 +112,11 @@ A: 擺飾
 B: 點擊後進入GOOGLE MAP
 C: 點擊後問機器人 營業時間
 D: 點擊後進入官網
+
+- 其他訊息種類
+![](https://i.imgur.com/dHnDYQ4.png)
+
+其中**優惠眷**、**集點卡**和**問卷調查**是只有在聊天模式才可以使用的訊息種類
 
 ---
 ## 聊天機器人模式
@@ -119,6 +152,8 @@ https://developers.line.biz/console/channel/1654251856/basics
 - 第一個CMD
     ```
     >cd Desktop
+    >mkdir linebot
+    >cd linebot
     >python app.py
     
      * Serving Flask app "app" (lazy loading)
@@ -198,7 +233,7 @@ from linebot.models import (
 資料夾結構
 根據FLASK的設定，你需要另外建立static/tmp的資料夾，把會需要上傳的檔案放進去
 ```
-root
+linebot
 │  app.py         
 │             
 ├─static       
@@ -215,7 +250,7 @@ root
 https://developers.line.biz/flex-simulator/
 把裡面的json存起來跟app.py放一起
 ```
-root    
+linebot   
 │  app.py   
 │  test.json  
 │                                                           
@@ -280,6 +315,92 @@ for tag in tags[:]:
 
 ![](https://i.imgur.com/fDtyyut.png)
 
+### 主動推播訊息
+可以直接開另一隻程式執行推播，不需要架伺服器直接與LINE API溝通
+```
+from flask import Flask, request, abort
+
+from linebot import (
+    LineBotApi, WebhookHandler
+)
+from linebot.exceptions import (
+    InvalidSignatureError
+)
+
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FlexSendMessage
+)
+
+line_bot_api = LineBotApi('ACCESS_TOKEN')
+
+line_bot_api.push_message('U081d445da00a4d5d75329c291137323c', TextSendMessage(text='Hello World!'))
+```
+
+## 上傳至雲端
+在本機端測試完成後，我們通常會將伺服器架設到雲端上
+
+### 環境
+- git
+- heroku
+
+### 1. 資料夾新增資料
+- requirements.txt
+- Procfile
+- runtime.txt
+
+**requirements.txt**
+告訴heroku有哪些套件需要安裝
+```
+line-bot-sdk
+flask
+beautifulsoup4==4.6.0
+requests
+gunicorn
+```
+**Procfilet**
+告訴heroku要怎麼啟動app
+```
+web gunicorn app:app
+```
+app:app 前面的app是要啟動的檔案名
+
+**runtime.txt**
+要用什麼版本的python執行
+```
+python-3.6.6
+```
+### 2. 登入heroku
+進入專案資料夾
+```
+>heroku login
+```
+這邊執行後會跳轉至heroku網頁登入畫面，
+
+### 3. 建立heroku app
+
+同樣在專案資料夾執行
+```
+> heroku create
+> git init
+> heroku git:remote -a still-eyrie-42891
+```
+still-eyrie-42891是我的專案名稱，各位看到的可能都不一樣
+接著繼續執行
+```
+> git add .
+> git commit -am "make it better"
+> git push heroku master
+```
+接著進入heroku網頁管理的畫面打開log看
+![](https://i.imgur.com/G4AomQo.png)
+若看到Build succeeded即成功
+
+### 4. 回到line developer設定webhook
+格式為
+```
+https://{app-name}.herokuapp.com/callback
+```
+![](https://i.imgur.com/C6BDxjX.png)
 
 
 
