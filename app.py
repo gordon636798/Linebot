@@ -31,7 +31,7 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    print(body)
+    #print(body)
     app.logger.info("Request body: " + body)
 
     # handle webhook body
@@ -50,7 +50,6 @@ def handle_message(event):
     print(id)
     profile = line_bot_api.get_profile(id)
     print(profile)
-    user[id] = 0
     if event.message.text =='你老師':
         message = TextSendMessage(text='許政穆老師')
         line_bot_api.reply_message(event.reply_token, message)
