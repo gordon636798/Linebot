@@ -33,6 +33,7 @@ https://ngrok.com/
 3. python3環境
 - pip install flask
 - pip install line-bot-sdk
+- pip install gunicorn
 
 ---
 ## 建立LINEBOT
@@ -184,10 +185,10 @@ https://developers.line.biz/console/channel/1654251856/basics
     ```
 以上為成功執行的畫面 
 
-### 3. 設定Webhook 把第二個視窗的的forwarding的網址後面加入/callback，記得把Use webhook打開
+### 設定Webhook 把第二個視窗的的forwarding的網址後面加入/callback，記得把Use webhook打開
 ![](https://i.imgur.com/PccZa1h.png)
 
-### 4. 成功運作畫面 (官方範例)
+### 成功運作畫面 (官方範例)
 ![](https://i.imgur.com/rdaRzRR.png)
 
 ## 新增聊天機器人功能
@@ -248,7 +249,7 @@ linebot
 
 - 準備好回復格式
 https://developers.line.biz/flex-simulator/
-把裡面的json存起來跟app.py放一起
+把裡面的json存起來跟app.py放同一個資料夾
 ```
 linebot   
 │  app.py   
@@ -285,7 +286,7 @@ from linebot.models import (
 
 ### 4. 很多時候 Linebot 會結合爬蟲
 ```
-# 爬蟲的程式碼 把此程式碼與app.py一起放
+# 爬蟲的程式碼 把此程式碼與app.py一起放同一個資料夾
 import requests
 from bs4 import BeautifulSoup
 import re
