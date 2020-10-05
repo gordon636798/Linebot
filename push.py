@@ -13,4 +13,4 @@ from linebot.models import (
 
 line_bot_api = LineBotApi('CHANNEL_ACCESS_TOKEN')
 
-line_bot_api.push_message('U081d445da00a4d5d75329c291137323c', TextSendMessage(text='Hello World!'))
+line_bot_api.push_message('LINE_UID', TextSendMessage(text='Hello World!'))
